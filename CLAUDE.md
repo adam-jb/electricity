@@ -6,7 +6,7 @@
 | `uk-battery-arbitrage-regulations.md` | UK regulatory deep-dive: licence requirements, MRP rules, industry codes, G98/G99, timelines, costs |
 | `uk-regulatory-flowchart.md` | VC-ready flowchart: UK approval process by scale (small/medium/VPP) |
 | `uk_battery_arbitrage_business_plan.md` | Full UK business plan with revenue model and financials |
-| `battery_cost_estimates.md` | Battery unit costs, installation costs, manufacturer comparisons |
+| `battery_cost_estimates.md` | Battery unit costs, installation costs, manufacturer comparisons; arbitrage income estimates |
 | `battery-sizing-tradeoff.md` | Applies to UK only | **3.68kW (G98) vs larger (G99)**: 10-15% less arbitrage but avoids 4-6 month G99 bottleneck. Recommends G98 for scale. |
 | `uk_grid_operator_models.md` | Applies to UK only, sets out company options from full electricity company onwards, and VLP route to just provide battery service and not full electricity provider. Also inclues details on all 4 sources of revenue for companies and VLPs, how those revenue sources interact |
 
@@ -94,87 +94,8 @@ In UK takes 9-18 months for OFGEM to register you as an electricity provider. Lo
 
 ### meeting notes 9th Jan
 
-Doubts / uncertainties / concerns
-Ben: 
-How much can be made by arbitrage?
-How hard is it to become an energy company? For each country.
-Can the business be easily scaled across nations? Related Q is how big is the opportunity?
 
-Riccardo:
-Less worried about market size - market is very big. The majority of customers with solar panels have no batteries (90% Netherlands, 70% Germany).
-Battery pricing: can it be low enough? Are Base actually losing money right now and the battery costs are more than they are making out, meaning the model wouldn’t work in the EU
-Base - are they making as much from being paid to balance the grid as they imply - is it any at all? (When they raised $200m they had 1000 batteries installed)
-(Sophia - is this a problem if the claim for this revenue is in the future?)
-
-Will:
-If you frame yourself as an energy provider, you’re vulnerable to disruption from other energy providers who have other business models (eg Fuse Energy in the UK)
-If we scale up a lot, will arbitrage income per new battery reduce?
-
-Adam:
-Unit costs
-Is customer acquisition affordable?
-
-Sophia:
-Competition: are larger energy companies/players already thinking about this?
-Are there hidden reasons people aren’t buying batteries for their homes already, when they are cost efficient already? Eg if reasons are only monetary then there is no upside to this business - want to target customers not thinking about batteries and want a lower energy bill
-
-Sina:
-Are batteries definitely the best solution? Might be overlooking something else
-
-
-
-Further discussion
-Sina: is there a market for smaller batteries, eg having multiple small batteries per home?
-
-Riccardo: larger batteries cost less per kWH. So better overheads with bigger batteries. Though there are forces encouraging smaller batteries too (eg wanting to put a battery in an apartment).
-
-Will: do EVs get used for this?
-
-Riccardo: EV manufacturers don't like cars being used to balance the grid. A few cars allow this but not many.
-
-Sophia: companies are considering using 2nd hand EV companies and repurpose them as home batteries. Could this lead to lower unit costs?
-
-Will: unlike the US where people live in their own homes, but in Spain many more people in apartments. Is it easier if you need to install one big battery in one building, to power all apartments in the building?
-
-
-
-
-Shopping list
-
-The idea being that if we know all these with high confidence, we can decide what to do:
-
-
-Get figures on total cost of batteries
-
-
-Fermi estimate income you can make on electricity arbitrage
-
-
-(this one top of list for Sophia) Understand regulations which block business model, and which countries *don’t* have those blockers. Eg becoming an energy provider. Include times for things to get approved (e.g. can take a long time in Hungary).
-
-
-How much is paid to energy companies to balance the grid, by nation?
-
-
-Find out if current energy providers’ are likely to act on this?
-
-
-Update business model calculator to have correct unit costs, expected income from arbitrage, and anything else needed
-
-Check Fuse Energy UK business model. Does it interact with this idea at all?
-
-
-
-
-Blockers to assess nations for
-
-Becoming an energy provider
-Being able to sell back to grid
-Installing batteries
-???What else???
-
-
-Things we could look for in a target region/nation
+what to look for in a target region/nation
 
 - Regulations allow for buying electricity from generators and selling to consumers (forming a REP)
 - volatile electricity prices
@@ -184,36 +105,10 @@ Things we could look for in a target region/nation
 - trend of increasingly volatility (ie more solar and wind generation in the pipeline)
 - (this one is weaker imo) documented public favourability of batteries (ie some people have bought them already)
 
-Random gpt search on how hard is it to become an energy provider:
-
-
-Factor
-Italy
-Spain
-Poland
-Hungary
-Regulator
-ARERA
-CNMC
-URE
-MEKH
-License Required
-Registration only
-Registration + CNMC authorization
-Full concession (OEE)
-Full license
-Capital/Guarantee
-Low (market participation guarantees)
-Financial guarantees required
-Demonstrated financial capacity + potential security deposit
-Financial capacity proof
 
 
 
-
-
-
-Adam notes from Base articles part 1 and 2
+### Adam notes from Base articles part 1 and 2
 
 You may want to skip 2nd part which felt more like a hype article/victory lap and much less valuable imo (the author invested in the company just before writing part 2 and I feel incentives might be funny there). Only update I got from it:
 - *utilities are willing to pay even more than the free market, because Base can save them from making expensive transmission upgrades*. Base can use all their data to evidence how they can control grid load in real time, and offer to sell that service 

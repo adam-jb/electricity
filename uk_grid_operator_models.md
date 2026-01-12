@@ -12,7 +12,6 @@ Because VLP-related regs came into force in 2024, the market for VLPs isnt satur
 
 
 
-
 ## VLP-related Regs
 P344: allow VLPs to participate in BM market.
 
@@ -310,13 +309,21 @@ Wholesale: prices reflect system marginal cost
 
 
 
-
 ## Why not just buy cheap batteries wholesale and sell them cheap on consumer market
 
 Not sure I have a really good answer to this. 
 
 
 
+
+## on how generators charge to the companies supplying domestic electricity: 
+claude opus: Pre-smart-meter, domestic customers were "profile settled"—assigned to standard load profiles (Profile Class 1 for credit meters, Class 2 for Economy 7). Actual consumption reconciled annually against deemed profiles. Smart meters enable half-hourly settlement, which theoretically lets innovative retailers capture value from demand flexibility, but penetration and data quality remain inconsistent.
+so if one has been data quality, one might capture some value there
+
+
+
+## for further exploring on profit maximising
+why not vertically integrate in generation too, as one company, so get those better margins too?
 
 
 

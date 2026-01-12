@@ -1,122 +1,193 @@
-# UK Battery Cost Estimates - Detailed Breakdown
 
-## Retail Price Decomposition
-
-The £4,800 typical retail installed price is NOT just hardware. It breaks down as:
-
-| Component                | Cost        | % of Retail | Notes                                      |
-|--------------------------|-------------|-------------|--------------------------------------------|
-| Battery + Inverter       | £2,160      | 45%         | Hardware only (cells, BMS, inverter, enclosure) |
-| Installation Labour      | £960        | 20%         | Electrician time + materials + scaffolding |
-| Customer Acquisition     | £385        | 8%          | Marketing, sales calls, site surveys, admin |
-| Warranty Reserve         | £290        | 6%          | 10-year warranty provision                 |
-| Installer Margin         | £480        | 10%         | Installer profit                           |
-| Distributor Margin       | £385        | 8%          | Wholesale markup                           |
-| Overheads                | £140        | 3%          | Warehouse, insurance, office staff         |
-| **Total Retail**         | **£4,800**  | **100%**    |                                            |
-
-**Key insight**: Hardware is only 45% of retail. Even free batteries would only halve the price.
-
-Sources:
-- [Sunsave Battery Costs UK](https://www.sunsave.energy/solar-panels-advice/batteries/costs)
-- [Logic4Training Electrician Rates](https://www.logic4training.co.uk/insights/electrician-day-rates-uk/)
+written by claude on 9th Jan 2026
 
 ---
+  Probability Distribution of Daily Arbitrage Profit
 
-## Cost Components at Each Scale
+  Price Distribution (Based on Agile Data)
 
-### Hardware Costs (Battery + Inverter + BMS ONLY)
+  From historical Agile data, I can construct a reasoned distribution:
 
-| Units      | Cost/kWh | 10kWh System | Source & Reasoning                                                           |
-|------------|----------|--------------|------------------------------------------------------------------------------|
-| 1 (retail) | £216     | £2,160       | 45% of £4,800 retail installed price                                         |
-| 100        | £250     | £2,500       | Trade pricing - Sunsynk + Pylontech kit at [ITS Technologies](https://www.itstechnologies.shop/) |
-| 1,000      | £220     | £2,200       | Direct from [GivEnergy](https://givenergy.co.uk/wholesalers/) or [Pylontech UK](mailto:service.uk@pylontech.com.cn) |
-| 10,000     | £180     | £1,800       | OEM/white-label via [AceOn](https://www.aceongroup.com/) or [Evlithium](https://www.evlithium.com/) |
-| 100,000    | £120-150 | £1,200-1,500 | Factory-direct CATL/BYD/EVE at ~$125/kWh ([Ember](https://ember-energy.org/latest-insights/how-cheap-is-battery-storage/)) |
+  | Price Band      | % of Half-Hours | Reasoning                                                                                                                                |
+  |-----------------|-----------------|------------------------------------------------------------------------------------------------------------------------------------------|
+  | < 0p (negative) | ~1.6%           | 284 plunge periods in 12 months ÷ 17,520 half-hours (https://www.sunsave.energy/solar-panels-advice/exporting-to-the-grid/agile-octopus) |
+  | 0-10p           | ~8%             | "Often under 10p on windy/sunny days" - roughly 4 hours/day on good days                                                                 |
+  | 10-15p          | ~12%            | Off-peak night rates typically fall here                                                                                                 |
+  | 15-20p          | ~25%            | Around average off-peak (19.4p)                                                                                                          |
+  | 20-25p          | ~28%            | Clustered around mean (21.9p)                                                                                                            |
+  | 25-35p          | ~18%            | Moderate peak periods                                                                                                                    |
+  | 35-50p          | ~6%             | High peak (avg peak 39.3p)                                                                                                               |
+  | > 50p           | ~1.4%           | ~11 days/year with 50p+ spikes (https://www.capture.energy/blog/octopus-agile-prices-explained-how-the-tariff-works)                     |
 
-**Note**: Hardware at 100 units can be HIGHER than the retail hardware component because retail installers cross-subsidise hardware with installation margins. At scale you pay true cost but eliminate middleman margins.
+  Arbitrage Opportunity Window
 
-### Installation Costs (Labour + Materials)
+  For a 10kWh battery doing 1 cycle/day:
+  - Buy window: 4 cheapest half-hours (~2 hours) at avg ~12p/kWh
+  - Sell window: 4 most expensive half-hours at avg ~38p/kWh
+  - Flat rate charged to customer: 24.5p/kWh
 
-| Units   | Cost/Unit | Breakdown                                                                     |
-|---------|-----------|-------------------------------------------------------------------------------|
-| 1       | £960      | 1 day labour (£350) + materials (£200) + site visit (£150) + admin (£260)     |
-| 100     | £800      | Repeat customer discount, batched site visits, standardised materials         |
-| 1,000   | £550      | Dedicated 2-person crews doing 2/day, bulk materials purchasing               |
-| 10,000  | £350      | In-house teams (40 electricians), fleet vehicles, zero acquisition overhead   |
-| 100,000 | £250      | National fleet, "plug and play" pre-configured systems, same-day installs     |
+  Daily Profit Probability Distribution (per 10kWh battery)
 
-Source: [Logic4Training UK Electrician Day Rates](https://www.logic4training.co.uk/insights/electrician-day-rates-uk/) - avg £335/day
+  | Percentile        | Daily Spread (p/kWh) | Daily Gross Profit | Reasoning                               |
+  |-------------------|----------------------|--------------------|-----------------------------------------|
+  | P10 (bad day)     | 12p                  | £1.08              | Low wind, low demand, compressed spread |
+  | P25               | 18p                  | £1.62              | Below-average arbitrage day             |
+  | P50 (median)      | 24p                  | £2.16              | Typical day: buy at ~12p, sell at ~36p  |
+  | P75               | 32p                  | £2.88              | Good spread day                         |
+  | P90 (good day)    | 45p                  | £4.05              | High volatility, negative/spike pricing |
+  | P99 (exceptional) | 70p+                 | £6.30+             | Plunge + spike same day                 |
 
-### Soft Costs (Acquisition, Warranty, Margins, Overheads)
+  Expected value (mean): ~£2.40/day per 10kWh battery
 
-| Units   | Cost/Unit | Components                                                                    |
-|---------|-----------|-------------------------------------------------------------------------------|
-| 1       | £1,680    | Customer acquisition (£385) + warranty (£290) + margins (£865) + overhead (£140) |
-| 100     | £400      | Reduced marketing, warranty reserve, minimal margin layer                      |
-| 1,000   | £250      | Lower acquisition via B2B, bulk warranty negotiation                          |
-| 10,000  | £150      | Near-zero acquisition, self-insured warranty pool                             |
-| 100,000 | £75       | Zero acquisition (VPP model), actuarial warranty reserve only                 |
+  Assumptions: 90% round-trip efficiency applied, 1 cycle/day
 
----
+  ---
+  Scale Economics: 100 to 100,000 Units
 
-## Total Capex Summary
+  Hardware Costs at Scale
 
-| Scale   | Hardware | Install | Soft Costs | **Total/Unit** | Fleet Cost | vs Retail |
-|---------|----------|---------|------------|----------------|------------|-----------|
-| 1       | £2,160   | £960    | £1,680     | **£4,800**     | -          | baseline  |
-| 100     | £2,500   | £800    | £400       | **£3,700**     | £370k      | -23%      |
-| 1,000   | £2,200   | £550    | £250       | **£3,000**     | £3.0M      | -38%      |
-| 10,000  | £1,800   | £350    | £150       | **£2,300**     | £23M       | -52%      |
-| 100,000 | £1,350   | £250    | £75        | **£1,675**     | £167.5M    | -65%      |
+  | Units      | Battery Cost/kWh | 10kWh Battery Cost | Source                                                                                                                                      |
+  |------------|------------------|--------------------|---------------------------------------------------------------------------------------------------------------------------------------------|
+  | 1 (retail) | £480             | £4,800             | https://www.sunsave.energy/solar-panels-advice/batteries/costs                                                                              |
+  | 100        | £380             | £3,800             | ~20% volume discount via wholesale (https://decogroup.co.uk/collections/solar-panel-batteries)                                              |
+  | 1,000      | £300             | £3,000             | Commercial scale pricing (https://www.gsl-energy.com/the-real-cost-of-commercial-battery-energy-storage-in-2025-what-you-need-to-know.html) |
+  | 10,000     | £220             | £2,200             | Large containerised pricing (~£180-240/kWh)                                                                                                 |
+  | 100,000    | £150-180         | £1,500-1,800       | Near utility-scale ($125/kWh ≈ £100/kWh for equipment + £50-80 for distributed install)                                                     |
 
----
+  Installation Costs at Scale
 
-## Where the Savings Come From
+  | Units   | Install Cost/Unit | Reasoning                                                                                                                   |
+  |---------|-------------------|-----------------------------------------------------------------------------------------------------------------------------|
+  | 1       | £1,200            | Retail installer, one-off job                                                                                               |
+  | 100     | £900              | Bulk contract, repeat work discount (~25%)                                                                                  |
+  | 1,000   | £600              | Dedicated crews, standardised process                                                                                       |
+  | 10,000  | £400              | In-house teams, scheduling efficiency                                                                                       |
+  | 100,000 | £250-300          | VPP-style mass deployment, "plug and play" systems (https://ember-energy.org/latest-insights/how-cheap-is-battery-storage/) |
 
-| Scale     | Hardware Saving | Install Saving | Soft Cost Saving | Total Saving |
-|-----------|-----------------|----------------|------------------|--------------|
-| 100       | -£340 (worse)   | +£160          | +£1,280          | **£1,100**   |
-| 1,000     | -£40 (worse)    | +£410          | +£1,430          | **£1,800**   |
-| 10,000    | +£360           | +£610          | +£1,530          | **£2,500**   |
-| 100,000   | +£810           | +£710          | +£1,605          | **£3,125**   |
+  Total Capex per Unit
 
-**Key finding**: At 100-1,000 units, savings come primarily from **eliminating soft costs** (margins, acquisition). Hardware savings only kick in meaningfully at 10,000+ units when you access OEM/factory pricing.
+  | Scale   | Hardware | Install | Total/Unit | Total Fleet Cost |
+  |---------|----------|---------|------------|------------------|
+  | 100     | £3,800   | £900    | £4,700     | £470,000         |
+  | 1,000   | £3,000   | £600    | £3,600     | £3.6M            |
+  | 10,000  | £2,200   | £400    | £2,600     | £26M             |
+  | 100,000 | £1,650   | £275    | £1,925     | £192.5M          |
 
----
+  ---
+  Fleet Revenue & Payback
 
-## Updated Payback Analysis
+  Annual Revenue per Unit (10kWh)
 
-| Scale   | Capex/Unit | Annual Profit/Unit | Payback  | Note                              |
-|---------|------------|--------------------| ---------|-----------------------------------|
-| 100     | £3,700     | £613 (net of 30% opex) | **6.0 years** | Revised down from £4,700        |
-| 1,000   | £3,000     | £709 (net of 19% opex) | **4.2 years** | Revised down from £3,600        |
-| 10,000  | £2,300     | £761 (net of 13% opex) | **3.0 years** | Revised down from £2,600        |
-| 100,000 | £1,675     | £788 (net of 10% opex) | **2.1 years** | Revised down from £1,925        |
+  | Percentile     | Daily Profit | Annual Profit |
+  |----------------|--------------|---------------|
+  | P25            | £1.62        | £591          |
+  | P50 (Expected) | £2.40        | £876          |
+  | P75            | £2.88        | £1,051        |
 
-Annual profit assumes £876 gross per unit (£2.40/day × 365), less OpEx percentage.
+  Fleet Economics Summary
 
----
+  | Scale   | Capex/Unit | Annual Revenue/Unit | Simple Payback | Fleet Annual Revenue |
+  |---------|------------|---------------------|----------------|----------------------|
+  | 100     | £4,700     | £876                | 5.4 years      | £87,600              |
+  | 1,000   | £3,600     | £876                | 4.1 years      | £876,000             |
+  | 10,000  | £2,600     | £876                | 3.0 years      | £8.76M               |
+  | 100,000 | £1,925     | £876                | 2.2 years      | £87.6M               |
 
-## Key Sources
+  ---
+  Operational Costs (Annual, % of Revenue)
 
-### Cost Breakdown
-- Sunsave Battery Costs: https://www.sunsave.energy/solar-panels-advice/batteries/costs
-- Logic4Training Electrician Rates: https://www.logic4training.co.uk/insights/electrician-day-rates-uk/
-- GSL Energy Commercial Costs: https://www.gsl-energy.com/the-real-cost-of-commercial-battery-energy-storage-in-2025-what-you-need-to-know.html
+  | Cost Item            | 100 units | 1,000 units | 10,000 units | 100,000 units |
+  |----------------------|-----------|-------------|--------------|---------------|
+  | Platform/software    | 15%       | 8%          | 4%           | 2%            |
+  | Customer support     | 10%       | 6%          | 4%           | 3%            |
+  | Maintenance/warranty | 5%        | 5%          | 5%           | 5%            |
+  | Total OpEx           | 30%       | 19%         | 13%          | 10%           |
 
-### Scale Pricing
-- Ember Battery Storage: https://ember-energy.org/latest-insights/how-cheap-is-battery-storage/
-- ITS Technologies Trade: https://www.itstechnologies.shop/
-- GivEnergy Wholesalers: https://givenergy.co.uk/wholesalers/
-- AceOn OEM: https://www.aceongroup.com/
+  Net Annual Profit
 
-### Market Data
-- MCS Installation Data: https://www.solarpowerportal.co.uk/battery-storage/mcs-bess-and-heat-pumps-drive-record-year-for-small-scale-renewables-in-2024
-- APQC Inventory Carrying Costs: https://www.apqc.org/what-we-do/benchmarking/open-standards-benchmarking/measures/inventory-carrying-cost-percentage
+  | Scale   | Gross Revenue | OpEx     | Net Profit | Net Margin |
+  |---------|---------------|----------|------------|------------|
+  | 100     | £87,600       | £26,280  | £61,320    | 70%        |
+  | 1,000   | £876,000      | £166,440 | £709,560   | 81%        |
+  | 10,000  | £8.76M        | £1.14M   | £7.62M     | 87%        |
+  | 100,000 | £87.6M        | £8.76M   | £78.84M    | 90%        |
 
----
+  ---
+  Key Sources
 
-*Updated: January 2026*
-*Corrected to properly separate hardware (45%) from installation (20%) and soft costs (35%)*
+  - https://www.ofgem.gov.uk/information-consumers/energy-advice-households/energy-price-cap-explained
+  - https://energy-stats.uk/octopus-agile-tariff-pricing/
+  - https://www.gsl-energy.com/the-real-cost-of-commercial-battery-energy-storage-in-2025-what-you-need-to-know.html
+  - https://ember-energy.org/latest-insights/how-cheap-is-battery-storage/
+  - https://www.sunsave.energy/solar-panels-advice/batteries/costs
+  - https://decogroup.co.uk/collections/solar-panel-batteries
+  - https://www.logic4training.co.uk/insights/electrician-day-rates-uk/
+  - https://mobilityforesights.com/product/uk-virtual-power-plant-market
+
+  ---
+  Summary
+
+  - Expected daily profit: £2.40/unit (P50), range £1.08 (P10) to £4.05 (P90)
+  - Payback improves dramatically at scale: 5.4 years (100 units) → 2.2 years (100,000 units)
+  - At 100,000 units: £78.84M net annual profit on £192.5M capex (41% annual return)
+
+
+
+
+## Prices checked by Adam (if they havent been checked they cannot be relied on)
+
+single unit: 9.6kWH £2.5k + vat https://decogroup.co.uk/products/swatten-9-6kwh-battery
+ Excludes inverter and install
+
+an even cheaper single unit : 9.6kWH £2.0k + vat  https://www.itstechnologies.shop/products/givenergy-9-5-kwh-li-ion-battery-gen-3
+  Excludes inverter and install
+
+single unit less per kWH: 5.1kWH £650 + vat https://www.tradesparky.com/solarsparky/batteries/dyness/dyness-dl50c-512kwh-lithium-iron-phosphate-battery
+  Excludes inverter and install
+  Can stack 2 of these in parallel (up to 50 in parallel if you need)
+To ask of these:
+- inverter needs
+- install needs
+- other equipment needed
+- does it count as G98 and not G99? The size of the inverter determines this
+- can I get good deals if go wholesale? May have to talk to suppliers as LLMs seem unable to find wholesale discounters online
+
+
+
+
+## Ideas for cheaper batteries
+
+What is a battery actually? What is the difference between buying one giant battery and lots of small ones?
+
+a battery is a collection of cells which hold electricity. Put into small or large boxes. And can plug into a grid.
+
+the expensive part of the battery are the bits which hold electricity. So in theory making lots of small ones should cost little more than one big one, if the net storage capacity is the same in either case.
+
+
+
+
+
+
+## Containerised street-level storage
+alternative business model... problem a nightmare of planning permission for UK. But easier to find giant batteries for it at low cost.
+
+not hyped to explore further.
+
+
+
+ ## Ideas for faster and cheaper battery installs
+
+- Plug-and-play systems (Anker SOLIX style) where customer self-installs
+
+- Standardised rapid-install protocols compressing electrician time to <2 hours
+
+- Social housing bulk contracts where you install 50+ units in one building visit
+
+
+
+## Thoughts on vertical integration
+if going for scale of operation, which being an electricity provider would involve, there is more alignment with integrating battery making into the operation, to get those margins which pay off more at scale. Includes installation ease and speed (eg standardisation means we can have our own installation engineers who do this very fast and very well)
+
+
+
+

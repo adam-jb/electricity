@@ -1,7 +1,7 @@
 
 
 ### If you are doing research (not coding)
-Mowever many asks of you will be research for start up problem spaces, pain points or products.
+However many asks of you will be research for start up problem spaces, pain points or products.
 
 Ways of working to follow:
 - store reports in .md files
@@ -39,21 +39,6 @@ Chatgpt thinks blockchain much lower margins: Blockchain Costs Are Front-Loaded
 - Audit
 - Partner risk management 
 - Reputation management
-
-
-*#ChatGPT costs for each element of US->Egypt transfer:** CLAUDE CODE BELIEVES THESE CAN BE LOWER. SEE `payments-platform-architecture.md` 
-
-| Layer                                                                                                 | Cost             | Paid by      |
-| ----------------------------------------------------------------------------------------------------- | ---------------- | ------------ |
-| ACH pull (transfer from user to your US partner account)                                              | $0.50            | Sender / You |
-| Compliance (sanctions screening, KYC)                                                                 | $0.20            | You          |
-| USD→USDC (conversion fee)                                                                             | $0.05            | You          |
-| Blockchain fee (ish). To send USDC to wallet of Egypt partner (eg transfer via Solana, Ethereum, etc) | $0.02            | You          |
-| USDC→EGP FX (conversion internally by Eygptian partner)                                               | $0.50–$2.00      | You          |
-| Egypt payout (to customer's friend)                                                                   | $0.50            | You          |
-| **Total hard cost**                                                                                   | **~$1.80–$3.50** | You          |
-|                                                                                                       |                  |              |
-|                                                                                                       |                  |              |
 
 
 

@@ -5,6 +5,36 @@
 
 ---
 
+## Table of Contents
+
+- [Flow](#flow)
+- [US Side: You Don't Need to Be a Bank](#us-side-you-dont-need-to-be-a-bank)
+  - [Transfer Service](#1-transfer-service-core)
+  - [Ledger Service](#2-ledger-service)
+  - [Compliance Service](#3-compliance-service)
+- [Cost Optimisation](#cost-optimisation)
+- [Build vs Buy Decision Matrix](#build-vs-buy-decision-matrix)
+- [Timeline & Team](#timeline--team)
+- [Key Risks & Mitigations](#key-risks--mitigations)
+- [Claude's Take on Security](#claude-take-on-security)
+- [Info on Services We Might Use](#info-on-services-we-might-use)
+  - [Direct NACHA Files](#direct-nacha-files)
+  - [FedNow (Instant US Payments)](#fednow-instant-us-payments)
+  - [KYC Providers (Persona / Onfido)](#kyc-providers-persona--onfido)
+  - [KYC with Plaid Identity](#kyc-with-plaid-identity)
+  - [OFAC SDN List](#ofac-sdn-list)
+  - [AML Monitoring](#aml-monitoring)
+  - [PSP License Egypt](#psp-license-egypt)
+  - [InstaPay Egypt](#instapay-egypt)
+  - [OTC Crypto / OTC Liquidity](#otc-crypto--otc-liquidity)
+  - [AML Monitoring in USA: Legal Requirements](#aml-monitoring-in-usa-legal-requirements)
+- [Security Architecture](#security-architecture)
+- [Security Checklist for MVP](#security-checklist-for-mvp)
+- [Useful Links](#useful-links)
+
+
+---
+
 ## Flow
  STEP    ACTION                          WHO DOES IT         COMPLIANCE CHECK
   ────────────────────────────────────────────────────────────────────────────
@@ -66,156 +96,10 @@
 
 
 
-## Egypt Partner Integration
-
-### Partner Types
-
-| Type | Examples | What they do | Typical fee |
-|------|----------|--------------|-------------|
-| **Licensed bank** | CIB, Banque Misr, QNB | Direct EGP bank transfers | 0.5-1% + fixed |
-| **Payment Service Provider (PSP)** | Fawry, Paymob, Accept | Mobile wallets, cash pickup | 1-2% |
-| **Crypto-friendly PSP** | Yellow Card, Kotani Pay | Accept USDC, payout local | 1-3% |
 
 
+## Cost optimisation: made fully possible by becoming Category B in Egypt
 
-
-## Critical Services Detail
-
-### 1. Transfer Service (Core)
-
-Orchestrates the full flow:
-```
-1. Validate request + compliance check
-2. Debit user's linked US account (ACH via Plaid)
-3. Convert USD → USDC (Circle mint)
-4. Transfer USDC to Egypt partner wallet
-5. Egypt partner converts USDC → EGP
-6. Payout to recipient (bank/mobile money)
-7. Update ledger, notify user
-```
-
-**State machine** for transfer status (enables "see where money is"):
-- `initiated` → `compliance_check` → `funds_pulled` → `converting` → `in_transit` → `partner_received` → `paid_out` → `completed`
-
-### 2. Ledger Service
-
-Double-entry accounting is non-negotiable for money transmission:
-- Every transaction creates balanced debit/credit entries
-- Immutable audit trail
-- Reconciliation jobs run hourly
-
-Recommend: Use existing library like [Medici](https://github.com/flash-oss/medici) (Node.js) or build custom with PostgreSQL advisory locks.
-
-### 3. Compliance Service
-
-| Check | When | Provider | Cost |
-|-------|------|----------|------|
-| OFAC/sanctions screening | Every transfer | ComplyAdvantage or Dow Jones | ~$0.10-0.20/check |
-| KYC (identity verification) | Onboarding | Persona, Onfido, Jumio | ~$2-5/user |
-| Transaction monitoring | Continuous | Sardine, Unit21 | ~$500+/month base |
-
-**Regulatory note**: US side requires Money Transmitter License (MTL) in each state OR partnership with licensed entity. Egypt side requires partnership with licensed bank/PSP.
-
----
-
-## Security Architecture
-
-| Layer | Implementation |
-|-------|----------------|
-| **Encryption at rest** | AES-256 (RDS, S3 default) |
-| **Encryption in transit** | TLS 1.3 everywhere |
-| **Secrets management** | AWS Secrets Manager / HashiCorp Vault |
-| **Auth** | OAuth2 + JWT (short-lived tokens), refresh token rotation |
-| **API security** | Rate limiting, request signing for partner APIs |
-| **Wallet security** | HSM-backed keys for blockchain ops (Circle handles this) |
-| **Audit logging** | Immutable logs to S3 + CloudWatch |
-
----
-
-## Build vs Buy Decision Matrix
-
-| Component | Recommendation | Rationale |
-|-----------|----------------|-----------|
-| US bank integration | **Buy** (Plaid) | 6+ months to build, $500k+ |
-| Blockchain rails | **Buy** (Circle) | Compliance, custody handled |
-| KYC | **Buy** (Persona) | Regulatory expertise built-in |
-| Ledger | **Build** | Core competency, simple enough |
-| Transfer orchestration | **Build** | Core product, must own |
-| Egypt payout | **Partner** | Must use licensed local entity |
-
----
-
-## Timeline & Team
-
-### MVP (3-4 months)
-
-| Phase | Duration | Output |
-|-------|----------|--------|
-| Foundation | 4 weeks | Auth, basic API, DB schema, CI/CD |
-| Integrations | 4 weeks | Plaid, Circle, KYC provider connected |
-| Core flow | 4 weeks | End-to-end transfer working |
-| Compliance + polish | 4 weeks | Sanctions screening, error handling, monitoring |
-
-### Minimum Team in Claude's view (I - Adam - dispute this - too big too slow). Maybe team of 2-3
-
-| Role | Count | Notes |
-|------|-------|-------|
-| Backend engineer | 2 | One senior, one mid |
-| Frontend/mobile | 1 | React Native + web |
-| DevOps/Infra | 0.5 | Can be part-time or contractor |
-| Compliance | 1 | Critical for MTL process |
-
-**Total: 4-5 people for MVP**
-
----
-
-## Key Risks & Mitigations
-
-| Risk | Mitigation |
-|------|------------|
-| US Money Transmitter License | Partner with licensed entity (e.g., Stripe Treasury, Unit, Synapse) instead of own license. Own MTL takes 12-24 months, $500k+ legal |
-| Egypt partner reliability | Have 2+ payout partners; build failover logic |
-| Blockchain volatility | Never hold crypto > minutes; instant conversion via Circle |
-| Downtime during transfer | Idempotent operations + state machine allows safe retries |
-
----
-
-
-
-## Useful Links
-
-- Circle USDC API: https://developers.circle.com/
-- Plaid API: https://plaid.com/docs/
-- AWS compliance programs: https://aws.amazon.com/compliance/programs/
-- NestJS framework: https://nestjs.com/
-- Medici ledger library: https://github.com/flash-oss/medici
-- Unit (Banking-as-a-Service with MTL): https://www.unit.co/
-- Egypt Central Bank FinTech sandbox: https://www.cbe.org.eg/en/financial-technology/regulatory-sandbox
-
----
-
-## Security Checklist for MVP
-
-  Must have before launch:
-  - TLS everywhere
-  - Circle custody (don't hold keys yourself)
-  - MFA on admin accounts
-  - Rate limiting
-  - Secrets in Secrets Manager (not env vars)
-  - Basic fraud rules (velocity, new recipient delay)
-  - Audit logging to immutable store
-  - Input validation / parameterized queries
-
-  Can wait until scale:
-  - Pentest
-  - HSM for self-custody
-  - SOC2 certification (~$30-50k)
-  - Device fingerprinting
-  - Advanced behavioral fraud detection
-
-
-
-## Cost optimisation
   ---
   Cost Minimums: Component by Component
 
@@ -359,6 +243,99 @@ Recommend: Use existing library like [Medici](https://github.com/flash-oss/medic
   │ Egypt      │ Own entity + OTC + direct rails         │ 0.3-0.5%      │
   └────────────┴─────────────────────────────────────────┴───────────────┘
   Realistic optimized: ~$0.80-1.20/tx on $200 transfer
+
+
+
+
+---
+
+## Build vs Buy Decision Matrix
+
+| Component | Recommendation | Rationale |
+|-----------|----------------|-----------|
+| US bank integration | **Buy** (Plaid) | 6+ months to build, $500k+ |
+| Blockchain rails | **Buy** (Circle) | Compliance, custody handled |
+| KYC | **Buy** (Persona) | Regulatory expertise built-in |
+| Ledger | **Build** | Core competency, simple enough |
+| Transfer orchestration | **Build** | Core product, must own |
+| Egypt payout | **Partner** | Must use licensed local entity |
+
+
+
+### Minimum Team in Claude's view (I - Adam - dispute this - too big too slow). Maybe team of 2-3 better imo
+
+| Role | Count | Notes |
+|------|-------|-------|
+| Backend engineer | 2 | One senior, one mid |
+| Frontend/mobile | 1 | React Native + web |
+| DevOps/Infra | 0.5 | Can be part-time or contractor |
+| Compliance | 1 | Critical for MTL process |
+
+**Total: 4-5 people for MVP**
+
+---
+
+## Key Risks & Mitigations
+
+| Risk | Mitigation |
+|------|------------|
+| US Money Transmitter License | Partner with licensed entity (e.g., Stripe Treasury, Unit, Synapse) instead of own license. Own MTL takes 12-24 months, $500k+ legal |
+| Egypt partner reliability | Have 2+ payout partners; build failover logic |
+| Blockchain volatility | Never hold crypto > minutes; instant conversion via Circle |
+| Downtime during transfer | Idempotent operations + state machine allows safe retries |
+
+---
+
+
+
+## Useful Links
+
+- Circle USDC API: https://developers.circle.com/
+- Plaid API: https://plaid.com/docs/
+- AWS compliance programs: https://aws.amazon.com/compliance/programs/
+- NestJS framework: https://nestjs.com/
+- Medici ledger library: https://github.com/flash-oss/medici
+- Unit (Banking-as-a-Service with MTL): https://www.unit.co/
+- Egypt Central Bank FinTech sandbox: https://www.cbe.org.eg/en/financial-technology/regulatory-sandbox
+
+---
+
+
+## Security Architecture
+
+| Layer | Implementation |
+|-------|----------------|
+| **Encryption at rest** | AES-256 (RDS, S3 default) |
+| **Encryption in transit** | TLS 1.3 everywhere |
+| **Secrets management** | AWS Secrets Manager / HashiCorp Vault |
+| **Auth** | OAuth2 + JWT (short-lived tokens), refresh token rotation |
+| **API security** | Rate limiting, request signing for partner APIs |
+| **Wallet security** | HSM-backed keys for blockchain ops (Circle handles this) |
+| **Audit logging** | Immutable logs to S3 + CloudWatch |
+
+---
+
+
+
+## Security Checklist for MVP
+
+  Must have before launch:
+  - TLS everywhere
+  - Circle custody (don't hold keys yourself)
+  - MFA on admin accounts
+  - Rate limiting
+  - Secrets in Secrets Manager (not env vars)
+  - Basic fraud rules (velocity, new recipient delay)
+  - Audit logging to immutable store
+  - Input validation / parameterized queries
+
+  Can wait until scale:
+  - Pentest
+  - HSM for self-custody
+  - SOC2 certification (~$30-50k)
+  - Device fingerprinting
+  - Advanced behavioral fraud detection
+
 
 
 
